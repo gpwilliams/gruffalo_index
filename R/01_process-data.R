@@ -33,13 +33,12 @@ type_freq <- token_freq %>%
   group_by(eng) %>%
   summarise(
     count = n(),
-    total_diff = sum(diff),
-    lex = sum(lex),
-    phon = sum(phon),
-    unsure = sum(unsure),
-    none = count - sum(lex, phon, unsure)
+    total_diff = sum(diff, na.rm = TRUE),
+    lex = sum(lex, na.rm = TRUE),
+    phon = sum(phon, na.rm = TRUE),
+    unsure = sum(unsure, na.rm = TRUE),
+    none = count - sum(lex, phon, unsure, na.rm = TRUE)
   ) %>%
-  mutate_if(is.numeric, replace_na, replace = 0) %>%
   select(eng, count, total_diff, none, everything())
 
 # save data

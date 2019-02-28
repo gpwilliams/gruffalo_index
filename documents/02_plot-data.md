@@ -15,7 +15,7 @@ Our analyses based on this corpus informed how we built our miniature artificial
 Analysis
 ========
 
-We'll use a handful of packages for our exploration of the data. I often use the `here` package which allows us to read and write data from reative file paths across machines. Why should you use relative rather than absolute file paths? [Jenny Bryan will set your computer on fire if you use the latter](https://github.com/jennybc/here_here). The `tidyverse` package is the main workhorse that allows us to do most of our data processing and plotting. Next, we use `cowplot` which allows us to include images in our plots (amongst other cool features), and `ggridges` which lets us easily plot some cool ridgeline plots (see the [ggridges GitHub page](https://github.com/clauswilke/ggridges) for a nice example on how to use this pacakge).
+We'll use a handful of packages for our exploration of the data. I often use the `here` package which allows us to read and write data from reative file paths across machines. Why should you use relative rather than absolute file paths? [Jenny Bryan will set your computer on fire if you use the latter](https://github.com/jennybc/here_here). The `tidyverse` package is the main workhorse that allows us to do most of our data processing and plotting. Next, we use `cowplot` which allows us to include images in our plots (amongst other cool features), and `ggridges` which lets us easily plot some cool ridgeline plots (see the [ggridges GitHub page](https://github.com/clauswilke/ggridges) for a nice example on how to use this pacakge). Finally, we use `ggwordcloud` for plotting wordclouds for the type frequencies.
 
 ``` r
 packages <- c(
@@ -31,15 +31,8 @@ packages <- c(
 lapply(packages, library, character.only = TRUE)
 ```
 
-Read and Prepare the Raw Data
------------------------------
-
-We'll first read in the data using `readr::read_csv()`. This is much like `read.csv()` from base R, but with some added bells and whistles. Primarily, I use `read_csv` over the base equivalent for its speed, because it notifies you about how data types are stored, and it saves data in a tibble. (If you want to know why you might prefer tibbles over data frames, check out the [tibble package vignette](https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html).) Finally, we use `ggwordcloud` for plotting wordclouds for the type frequencies.
-
-``` r
-token <- read_csv(here("data", "02_processed-data", "token_freq.csv"))
-type <- read_csv(here("data", "02_processed-data", "type_freq.csv"))
-```
+Prepare the Raw Data
+--------------------
 
 Let's take a look at our data. Just how are the token and type data organised?
 
@@ -90,9 +83,9 @@ token <- token %>%
       type == "ADV" ~ "adverb",
       type == "AUX" ~ "auxiliary",
       type == "CONTR" ~ "contraction"
-    )
-  ) %>% 
-  mutate(type = as.factor(type)) # enforces ordering for colours in plots
+    ),
+    type = as.factor(type) # enforces ordering for colours in plots
+  )
 ```
 
 Token Frequencies
@@ -394,11 +387,11 @@ head(type)
     ## # A tibble: 6 x 7
     ##   eng    count total_diff  none   lex  phon unsure
     ##   <chr>  <dbl>      <dbl> <dbl> <dbl> <dbl>  <dbl>
-    ## 1 a        151          1     0     1     0      0
+    ## 1 a        151          1   150     1     0      0
     ## 2 afraid     8          8     0     8     0      0
-    ## 3 after      2          2     0     1     0      0
-    ## 4 aha       12          8     0     4     0      0
-    ## 5 ahead     10          7     0     2     0      0
+    ## 3 after      2          2     0     1     1      0
+    ## 4 aha       12          8     4     4     4      0
+    ## 5 ahead     10          7     3     2     5      0
     ## 6 all       13         13     0     0    13      0
 
 We'll just focus here on how often words change by category, before we briefly look at how often words shift by part of speech.
@@ -418,7 +411,7 @@ type_shifts <- type %>%
   )
 ```
 
-Phonological shifts occur 29.35% of the time across all books. When a shift occurs, this shift is phonological (rather than lexical) 38.4% of the time.
+Phonological shifts occur 46.13% of the time across all books. When a shift occurs, this shift is phonological (rather than lexical) 49.48% of the time.
 
 How does this map onto the different parts of speech that we explored above for the token frequency data?
 
