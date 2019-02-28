@@ -23,7 +23,7 @@ Our analyses based on this corpus informed how we built our miniature artificial
 
 # Analysis
 
-We'll use a handful of packages for our exploration of the data. I often use the `here` package which allows us to read and write data from reative file paths across machines. Why should you use relative rather than absolute file paths? [Jenny Bryan will set your computer on fire if you use the latter](https://github.com/jennybc/here_here). The `tidyverse` package is the main workhorse that allows us to do most of our data processing and plotting. Next, we use `cowplot` which allows us to include images in our plots (amongst other cool features), and `ggridges` which lets us easily plot some cool ridgeline plots (see the [ggridges GitHub page](https://github.com/clauswilke/ggridges) for a nice example on how to use this pacakge).
+We'll use a handful of packages for our exploration of the data. I often use the `here` package which allows us to read and write data from reative file paths across machines. Why should you use relative rather than absolute file paths? [Jenny Bryan will set your computer on fire if you use the latter](https://github.com/jennybc/here_here). The `tidyverse` package is the main workhorse that allows us to do most of our data processing and plotting. Next, we use `cowplot` which allows us to include images in our plots (amongst other cool features), and `ggridges` which lets us easily plot some cool ridgeline plots (see the [ggridges GitHub page](https://github.com/clauswilke/ggridges) for a nice example on how to use this pacakge). Finally, we use `ggwordcloud` for plotting wordclouds for the type frequencies.
 
 ```{r load-libraries, message = FALSE, results = FALSE}
 packages <- c(
@@ -39,11 +39,9 @@ packages <- c(
 lapply(packages, library, character.only = TRUE)
 ```
 
-## Read and Prepare the Raw Data
+## Prepare the Raw Data
 
-We'll first read in the data using `readr::read_csv()`. This is much like `read.csv()` from base R, but with some added bells and whistles. Primarily, I use `read_csv` over the base equivalent for its speed, because it notifies you about how data types are stored, and it saves data in a tibble. (If you want to know why you might prefer tibbles over data frames, check out the [tibble package vignette](https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html).) Finally, we use `ggwordcloud` for plotting wordclouds for the type frequencies.
-
-```{r read-csvs, message = FALSE}
+```{r read-csvs, message = FALSE, include = FALSE}
 token <- read_csv(here("data", "02_processed-data", "token_freq.csv"))
 type <- read_csv(here("data", "02_processed-data", "type_freq.csv"))
 ```
@@ -76,9 +74,9 @@ token <- token %>%
       type == "ADV" ~ "adverb",
       type == "AUX" ~ "auxiliary",
       type == "CONTR" ~ "contraction"
-    )
-  ) %>% 
-  mutate(type = as.factor(type)) # enforces ordering for colours in plots
+    ),
+    type = as.factor(type) # enforces ordering for colours in plots
+  )
 ```
 
 ## Token Frequencies
