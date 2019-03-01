@@ -103,7 +103,7 @@ token <- token %>%
 
 ## Token Frequencies
 
-Let's explore the token frequencies for the words. Remember, this just takes a measure of how often things changes across all occurrences of words. This means that words that are very common get counted in the data a lot.
+Let's explore the token frequencies for the words (N = `r nrow(token)`. Remember, this just takes a measure of how often things changes across all occurrences of words. This means that words that are very common get counted in the data a lot.
 
 ### Exploring Changes
 
@@ -395,7 +395,7 @@ What's going on for nouns? Since this analysis includes many words (and all occu
 
 ## Type Frequencies
 
-We'll conduct a brief exploration into the type frequencies of words. This takes all unique words from the book in English, and looks at how often they change, and how they change. This just involves some simple counting. 
+We'll conduct a brief exploration into the type frequencies of words. This takes all unique words from the books in English (N = `r nrow(type)`), and looks at how often they change, and how they change. This just involves some simple counting. 
 
 First, lets get an idea of how the data are laid out.
 
@@ -495,3 +495,45 @@ Taking all of these findings into consideration, you can see that Scots is a ric
 [^1]: Use of the images and text of The Gruffalo and The Gruffalo's Child for communication and research purposes has been approved by Macmillan publishers.
 [^2]: The Gruffalo's Child was not available in Glaswegian when we started the corpus analysis.
 [^3]: We use shift in the code as this is how changes were initially defined in the data set. Throughout the text, we will just use change to avoid confusion.
+
+```{r make-summary-for-papers, include = FALSE}
+gruff_summary <- tibble(
+  label = c(
+    "token_contrastive",
+    "token_phon",
+    "token_constrastive_phon",
+    "token_phoneme_subs",
+    "token_consonant_drops",
+    "token_phon_contrastive_noun",
+    "type_contrastive",
+    "type_phon",
+    "type_constrastive_phon"
+  ),
+  frequency_proportion = c(
+    token_contrastive$proportion, 
+    donut_data %>% 
+      filter(shift_category == "phonological") %>% 
+      pull(proportion),
+    token_shift_only_types %>% 
+      filter(shift_category == "phonological") %>% 
+      pull(prop),
+    token_shift_summary$subs/sum(token_shift_type$n),
+    token_shift_summary$c_drops/sum(token_shift_type$n),
+    token_phon_descriptives %>% filter(type == "noun") %>% pull(prop),
+    with(type_shifts, (phon + lex)/n),
+    with(type_shifts, phon/n),
+    with(type_shifts, phon/(phon + lex))
+  )
+)
+
+counts <- tibble(
+  label = c("token", "type"),
+  count = c(
+    nrow(token),
+    nrow(type)
+  )
+)
+
+write_csv(gruff_summary, here("data", "03_summary-data", "frequencies.csv"))
+write_csv(counts, here("data", "03_summary-data", "counts.csv"))
+```

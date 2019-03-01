@@ -112,7 +112,7 @@ token <- token %>%
 Token Frequencies
 -----------------
 
-Let's explore the token frequencies for the words. Remember, this just takes a measure of how often things changes across all occurrences of words. This means that words that are very common get counted in the data a lot.
+Let's explore the token frequencies for the words (N = 3458. Remember, this just takes a measure of how often things changes across all occurrences of words. This means that words that are very common get counted in the data a lot.
 
 ### Exploring Changes
 
@@ -403,7 +403,7 @@ What's going on for nouns? Since this analysis includes many words (and all occu
 Type Frequencies
 ----------------
 
-We'll conduct a brief exploration into the type frequencies of words. This takes all unique words from the book in English, and looks at how often they change, and how they change. This just involves some simple counting.
+We'll conduct a brief exploration into the type frequencies of words. This takes all unique words from the books in English (N = 310), and looks at how often they change, and how they change. This just involves some simple counting.
 
 First, lets get an idea of how the data are laid out.
 
